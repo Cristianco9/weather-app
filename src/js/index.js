@@ -4,7 +4,7 @@ const weatherBox = document.querySelector('.weather-box');
 const weatherDetails = document.querySelector('.weather-details');
 const error404 = document.querySelector('.not-found');
 
-const fn = () => {
+search.addEventListener('click', () => {
 
   const APIKey = '3674a294817e779d7f1ac83361462cea';
   const city = document.querySelector('.search-box input').value;
@@ -14,7 +14,7 @@ const fn = () => {
   };
 
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`)
-  .then( response => { response.json() })
+  .then( response =>  response.json() )
   .then( dataJSON => {
 
     if (dataJSON.cod === '404') {
@@ -32,13 +32,18 @@ const fn = () => {
     const image = document.querySelector('.weather-box img');
     const temperature = document.querySelector('.weather-box .temperature');
     const description = document.querySelector('.weather-box .description');
-    const humidity = document.querySelector('.weather-box .humidity span');
-    const wind = document.querySelector('.weather-box .wind span');
+    const humidity = document.querySelector('.weather-details .humidity span');
+    const wind = document.querySelector('.weather-details .wind span');
+
+    const currentTime = dataJSON.dt;
+    const sunrise = dataJSON.sys.sunrise;
+    const sunset = dataJSON.sys.sunset;
+    const isDaytime = currentTime >= sunrise && currentTime <= sunset;
 
     switch (dataJSON.weather[0].main) {
 
       case 'Clear':
-        image.src = '../images/clear.png';
+        image.src = isDaytime ? '../images/day-clear.png' : '../images/night-clear.png';
         break;
 
       case 'Rain':
@@ -50,10 +55,10 @@ const fn = () => {
         break;
 
       case 'Clouds':
-        image.src = '../images/cloud.png';
+        image.src = isDaytime ? '../images/day-cloud.png' : '../images/night-cloud.png';
         break;
 
-      case 'haze':
+      case 'Haze':
         image.src = '../images/mist.png';
         break;
 
@@ -62,19 +67,17 @@ const fn = () => {
 
     }
 
-    temperature.innerHTML = `${parseInt(json.main.temp)}<span>°C</span>`;
+    temperature.innerHTML = `${parseInt(dataJSON.main.temp)}<span>°C</span>`;
     description.innerHTML = `${dataJSON.weather[0].description}`;
     humidity.innerHTML = `${dataJSON.main.humidity}%`
     wind.innerHTML = `${parseInt(dataJSON.wind.speed)}Km/h`;
 
-    weatherBox.styles.display = '';
+    weatherBox.style.display = '';
     weatherDetails.style.display = '';
-    weatherBox.classList.add('fadein');
-    weatherDetails.classList.add('fadein');
+    weatherBox.classList.add('fadeIn');
+    weatherDetails.classList.add('fadeIn');
     container.style.height = '59rem';
 
   })
 
-}
-
-search.addEventListener('click', fn);
+});

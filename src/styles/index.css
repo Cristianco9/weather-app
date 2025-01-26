@@ -118,7 +118,8 @@ body {
 .weather-details {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
   margin-top: 3rem;
 }
 
@@ -130,13 +131,11 @@ body {
 }
 
 .weather-details .humidity {
-  padding-left: -2rem;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .weather-details .wind {
-  padding-left: -2rem;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .weather-details i {
@@ -183,7 +182,7 @@ body {
   opacity: 0;
 }
 
-.fade-in {
+.fadeIn {
   animation: 0.5s fadeIn forwards;
   animation-delay: 0.5s;
 }
